@@ -29,4 +29,30 @@ public class ComplexNumber {
     public ComplexNumber add(ComplexNumber another) {
         return new ComplexNumber(real + another.getReal(), imaginary + another.getImaginary());
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Float.floatToIntBits(this.real);
+        hash = 47 * hash + Float.floatToIntBits(this.imaginary);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ComplexNumber other = (ComplexNumber) obj;
+        if (Float.floatToIntBits(this.real) != Float.floatToIntBits(other.real)) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.imaginary) != Float.floatToIntBits(other.imaginary)) {
+            return false;
+        }
+        return true;
+    }
 }
