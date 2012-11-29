@@ -19,7 +19,8 @@ public class MandelbrotSetPanel extends JPanel {
     
     private Integer centerX;
     private Integer centerY;
-
+    private double zoom = 1.0;
+    
     public MandelbrotSetPanel() {
         super();
         this.setBackground(Color.WHITE);
@@ -35,26 +36,28 @@ public class MandelbrotSetPanel extends JPanel {
             centerX = this.getWidth() / 2;
             centerY = this.getHeight() / 2;
         }
-        drawCordinateAxes(g, centerX, centerY);
-        Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(-2, 1, -1, 1, 0.005, 0.005);
+        g.drawLine(0, centerY, this.getWidth(), centerY);
+        g.drawLine(centerX, 0, centerX, this.getHeight());
+        Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(
+                -2 / zoom, 1 / zoom, -1 / zoom, 1 / zoom, 0.005 / zoom, 0.005 / zoom);
         for (ComplexNumber complexNumber : mandelbrotSet) {
-            double real = centerX + complexNumber.getReal() * this.getWidth() / 4;
-            double imaginary = centerY + complexNumber.getImaginary() * this.getWidth() / 4;
+            double real = centerX + complexNumber.getReal() * this.getWidth() / 4 * zoom;
+            double imaginary = centerY + complexNumber.getImaginary() * this.getWidth() / 4 * zoom;
             g2d.draw(new Line2D.Double(real, imaginary, real, imaginary));
         }
-    }
-    
-    private void drawCordinateAxes(Graphics g, int x, int y) {
-        g.drawLine(0, y, this.getWidth(), y);
-        g.drawLine(x, 0, x, this.getHeight());
     }
     
     private MouseListener mouseListener() {
         return new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                MandelbrotSetPanel.this.centerX = e.getX();
-                MandelbrotSetPanel.this.centerY = e.getY();
+                MandelbrotSetPanel thisPanel = MandelbrotSetPanel.this;
+                int dx = e.getX() - thisPanel.getWidth() / 2;
+                int dy = e.getY() - thisPanel.getHeight() / 2;
+                
+                MandelbrotSetPanel.this.centerX -= (int) (dx * zoom);
+                MandelbrotSetPanel.this.centerY -= (int) (dy * zoom);
+                MandelbrotSetPanel.this.zoom *= 1.1;
                 MandelbrotSetPanel.this.repaint();
             }
             @Override
