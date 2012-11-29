@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public final class MandelbrotSetCalculator {
     
-    private static final int ITERATIONS_COUNT = 40;
+    private static final int ITERATIONS_COUNT = 150;
     private static final int BOUND_RADIUS_SQUARE = 2 * 2;
 
     private MandelbrotSetCalculator() {

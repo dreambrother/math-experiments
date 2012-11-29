@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 public class Main {
 
     public static void main(String[] args) {
-        final Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(-2, 1, -1, 1, 0.01, 0.01);
+        final Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(-2, 1, -1, 1, 0.005, 0.005);
         JFrame jFrame = new MandelbrotSetFrame(mandelbrotSet);
         jFrame.setVisible(true);
     }
