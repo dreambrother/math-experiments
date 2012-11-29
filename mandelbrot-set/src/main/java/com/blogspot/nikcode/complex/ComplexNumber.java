@@ -6,19 +6,19 @@ package com.blogspot.nikcode.complex;
  */
 public class ComplexNumber {
 
-    private final float real;
-    private final float imaginary;
+    private final double real;
+    private final double imaginary;
 
-    public ComplexNumber(float real, float imaginary) {
+    public ComplexNumber(double real, double imaginary) {
         this.real = real;
         this.imaginary = imaginary;
     }
 
-    public float getReal() {
+    public double getReal() {
         return real;
     }
 
-    public float getImaginary() {
+    public double getImaginary() {
         return imaginary;
     }
     
@@ -32,9 +32,9 @@ public class ComplexNumber {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + Float.floatToIntBits(this.real);
-        hash = 47 * hash + Float.floatToIntBits(this.imaginary);
+        int hash = 3;
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.real) ^ (Double.doubleToLongBits(this.real) >>> 32));
+        hash = 37 * hash + (int) (Double.doubleToLongBits(this.imaginary) ^ (Double.doubleToLongBits(this.imaginary) >>> 32));
         return hash;
     }
 
@@ -47,10 +47,10 @@ public class ComplexNumber {
             return false;
         }
         final ComplexNumber other = (ComplexNumber) obj;
-        if (Float.floatToIntBits(this.real) != Float.floatToIntBits(other.real)) {
+        if (Double.doubleToLongBits(this.real) != Double.doubleToLongBits(other.real)) {
             return false;
         }
-        if (Float.floatToIntBits(this.imaginary) != Float.floatToIntBits(other.imaginary)) {
+        if (Double.doubleToLongBits(this.imaginary) != Double.doubleToLongBits(other.imaginary)) {
             return false;
         }
         return true;

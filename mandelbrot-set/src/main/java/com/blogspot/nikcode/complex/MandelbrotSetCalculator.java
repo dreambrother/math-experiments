@@ -19,7 +19,7 @@ public final class MandelbrotSetCalculator {
         ComplexNumber prevResult = new ComplexNumber(0, 0);
         for (int i = 0; i < ITERATIONS_COUNT; i++) {
             prevResult = prevResult.getSquare().add(startNumber);
-            float resultAbs = prevResult.getReal() * prevResult.getReal() 
+            double resultAbs = prevResult.getReal() * prevResult.getReal() 
                     + prevResult.getImaginary() * prevResult.getImaginary();
             if (resultAbs > BOUND_RADIUS_SQUARE) {
                 return false;
@@ -28,11 +28,11 @@ public final class MandelbrotSetCalculator {
         return true;
     }
     
-    public static Set<ComplexNumber> computeSet(float realAxisStart, float realAxisStop, float iAxisStart, 
-            float iAxisStop, float realAxisStep, float iAxisStep) {
+    public static Set<ComplexNumber> computeSet(double realAxisStart, double realAxisStop, double iAxisStart, 
+            double iAxisStop, double realAxisStep, double iAxisStep) {
         Set<ComplexNumber> mandelbrotSet = new HashSet<>();
-        for (float r = realAxisStart; r <= realAxisStop; r += realAxisStep) {
-            for (float i = iAxisStart; i <= iAxisStop; i+= iAxisStep) {
+        for (double r = realAxisStart; r <= realAxisStop; r += realAxisStep) {
+            for (double i = iAxisStart; i <= iAxisStop; i+= iAxisStep) {
                 ComplexNumber numberToCheck = new ComplexNumber(r, i);
                 if (isConvergence(numberToCheck)) {
                     mandelbrotSet.add(numberToCheck);
