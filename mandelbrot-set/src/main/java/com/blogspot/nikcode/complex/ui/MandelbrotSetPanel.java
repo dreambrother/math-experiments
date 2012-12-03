@@ -70,7 +70,7 @@ public class MandelbrotSetPanel extends JPanel {
                 
                 double real = dx / getRealSegmentSize();
                 double imaginary = dy / getImaginarySegmentSize();
-                double newRealSegmentsCount = getRealSegmetCount() / ZOOM;
+                double newRealSegmentsCount = getRealSegmentCount() / ZOOM;
                 double newImaginarySegmentsCount = getImaginarySegmentCount() / ZOOM;
                 thisPanel.realStart = real - newRealSegmentsCount / 2;
                 thisPanel.realEnd = real + newRealSegmentsCount / 2;
@@ -110,12 +110,12 @@ public class MandelbrotSetPanel extends JPanel {
         isFirstPaint = false;
     }
     
-    private double getRealSegmetCount() {
+    private double getRealSegmentCount() {
         return realEnd - realStart;
     }
     
     private double getRealSegmentSize() {
-        return getWidth() / getRealSegmetCount();
+        return getWidth() / getRealSegmentCount();
     }
     
     private double getImaginarySegmentCount() {
