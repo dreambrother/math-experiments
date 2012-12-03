@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 public class MandelbrotSetPanel extends JPanel {
     
     private static final int ZOOM = 2;
+    private static final int MAX_ZOOM = 8388608;
     private boolean isFirstPaint = true;
     private int screenCenterX;
     private int screenCenterY;
@@ -59,6 +60,9 @@ public class MandelbrotSetPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 MandelbrotSetPanel thisPanel = MandelbrotSetPanel.this;
+                if (thisPanel.currentZoom == MAX_ZOOM) {
+                    return;
+                }
                 int dx = e.getX() - axesCenterX;
                 int dy = e.getY() - axesCenterY;
                 thisPanel.axesCenterX = screenCenterX - dx * ZOOM;
@@ -75,6 +79,7 @@ public class MandelbrotSetPanel extends JPanel {
                 
                 thisPanel.currentZoom *= ZOOM;
                 thisPanel.repaint();
+                System.out.println("Current zoom " + thisPanel.currentZoom);
             }
             @Override
             public void mousePressed(MouseEvent e) {
