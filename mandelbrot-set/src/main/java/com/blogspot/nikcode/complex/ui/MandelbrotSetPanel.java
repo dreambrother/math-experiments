@@ -17,9 +17,17 @@ import javax.swing.JPanel;
  */
 public class MandelbrotSetPanel extends JPanel {
     
-    private Integer centerX;
-    private Integer centerY;
-    private double zoom = 1.0;
+    private static final int ZOOM = 2;
+    private boolean isFirstPaint = true;
+    private int screenCenterX;
+    private int screenCenterY;
+    private int axesCenterX;
+    private int axesCenterY;
+    private double realStart;
+    private double realEnd;
+    private double imaginaryStart;
+    private double imaginaryEnd;
+    private int currentZoom = 1;
     
     public MandelbrotSetPanel() {
         super();
@@ -31,19 +39,18 @@ public class MandelbrotSetPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        if (centerX == null && centerY == null) {
-            centerX = this.getWidth() / 2;
-            centerY = this.getHeight() / 2;
+        if (isFirstPaint) {
+            init();
         }
-        g.drawLine(0, centerY, this.getWidth(), centerY);
-        g.drawLine(centerX, 0, centerX, this.getHeight());
-        Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(
-                -2 / zoom, 1 / zoom, -1 / zoom, 1 / zoom, 0.005 / zoom, 0.005 / zoom);
+        g.drawLine(0, axesCenterY, getWidth(), axesCenterY);
+        g.drawLine(axesCenterX, 0, axesCenterX, getHeight());
+        
+        Set<ComplexNumber> mandelbrotSet = MandelbrotSetCalculator.computeSet(realStart, realEnd, imaginaryStart, imaginaryEnd, 
+                0.005 / currentZoom, 0.005 / currentZoom);
         for (ComplexNumber complexNumber : mandelbrotSet) {
-            double real = centerX + complexNumber.getReal() * this.getWidth() / 4 * zoom;
-            double imaginary = centerY + complexNumber.getImaginary() * this.getWidth() / 4 * zoom;
-            g2d.draw(new Line2D.Double(real, imaginary, real, imaginary));
+            double x = axesCenterX + complexNumber.getReal() * getRealSegmentSize();
+            double y = axesCenterY + complexNumber.getImaginary() * getImaginarySegmentSize();
+            g2d.draw(new Line2D.Double(x, y, x, y));
         }
     }
     
@@ -52,13 +59,22 @@ public class MandelbrotSetPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 MandelbrotSetPanel thisPanel = MandelbrotSetPanel.this;
-                int dx = e.getX() - thisPanel.getWidth() / 2;
-                int dy = e.getY() - thisPanel.getHeight() / 2;
+                int dx = e.getX() - axesCenterX;
+                int dy = e.getY() - axesCenterY;
+                thisPanel.axesCenterX = screenCenterX - dx * ZOOM;
+                thisPanel.axesCenterY = screenCenterY - dy * ZOOM;
                 
-                MandelbrotSetPanel.this.centerX -= (int) (dx * zoom);
-                MandelbrotSetPanel.this.centerY -= (int) (dy * zoom);
-                MandelbrotSetPanel.this.zoom *= 1.1;
-                MandelbrotSetPanel.this.repaint();
+                double real = dx / getRealSegmentSize();
+                double imaginary = dy / getImaginarySegmentSize();
+                double newRealSegmentsCount = getRealSegmetCount() / ZOOM;
+                double newImaginarySegmentsCount = getImaginarySegmentCount() / ZOOM;
+                thisPanel.realStart = real - newRealSegmentsCount / 2;
+                thisPanel.realEnd = real + newRealSegmentsCount / 2;
+                thisPanel.imaginaryStart = imaginary - newImaginarySegmentsCount / 2;
+                thisPanel.imaginaryEnd = imaginary + newImaginarySegmentsCount / 2;
+                
+                thisPanel.currentZoom *= ZOOM;
+                thisPanel.repaint();
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -73,5 +89,36 @@ public class MandelbrotSetPanel extends JPanel {
             public void mouseExited(MouseEvent e) {
             }
         };
+    }
+    
+    private void init() {
+        screenCenterX = this.getWidth() / 2;
+        screenCenterY = this.getHeight() / 2;
+        axesCenterX = screenCenterX;
+        axesCenterY = screenCenterY;
+        realStart = -2;
+        realEnd = 2;
+        double firstIterationSegmentSize = getRealSegmentSize();
+        double imaginarySegmentCount = getHeight() / firstIterationSegmentSize;
+        imaginaryStart = - (imaginarySegmentCount / 2);
+        imaginaryEnd = imaginarySegmentCount / 2;
+        
+        isFirstPaint = false;
+    }
+    
+    private double getRealSegmetCount() {
+        return realEnd - realStart;
+    }
+    
+    private double getRealSegmentSize() {
+        return getWidth() / getRealSegmetCount();
+    }
+    
+    private double getImaginarySegmentCount() {
+        return imaginaryEnd - imaginaryStart;
+    }
+    
+    private double getImaginarySegmentSize() {
+        return getHeight() / getImaginarySegmentCount();
     }
 }
