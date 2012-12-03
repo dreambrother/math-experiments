@@ -79,7 +79,6 @@ public class MandelbrotSetPanel extends JPanel {
                 
                 thisPanel.currentZoom *= ZOOM;
                 thisPanel.repaint();
-                System.out.println("Current zoom " + thisPanel.currentZoom);
             }
             @Override
             public void mousePressed(MouseEvent e) {
